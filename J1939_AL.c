@@ -78,11 +78,15 @@ const PGN_T _pgn_table[PGN_NUM] =
 };
 
 
+void *FuelConsumption_ptr;
+void *DashDisplay_ptr;
 void *EngSpeed_ptr;
 void *WatTemp_ptr;
 void *FaultCode_ptr;
 
 
+U16 FuelConsumption;
+U16 DashDisplay;
 U16 EngSpeed;
 U08 WatTemp;
 FAULT_CODE_T FaultCode;
@@ -129,9 +133,24 @@ void AL_process(J1939_RX_MESSAGE_T *msg_ptr)
 
    switch (msg_ptr->PGN)
    { 
-      case FMS_EEC1:
-         EngSpeed = msg_ptr->data[4];
-         EngSpeed = (EngSpeed << 8) + msg_ptr->data[3];
+      case FMS_LFC:
+		 FuelConsumption = (msg_ptr->data[4] << 8) + msg_ptr->data[3];
+         //FuelConsumption_ptr = &FuelConsumption;
+#if J1939_AL_DEBUG
+		 printf("FMS_LFC Fuel Consumption=%d\n", FuelConsumption);
+#endif
+		 break;
+
+	  case FMS_DD:
+		  DashDisplay = (msg_ptr->data[4] << 8) + msg_ptr->data[3];
+         //DashDisplay_ptr = &DashDisplay;
+#if J1939_AL_DEBUG
+		  printf("FMS_DD DashDisplay=%d\n", DashDisplay);
+#endif
+		 break;
+
+	  case FMS_EEC1:
+		  EngSpeed = (msg_ptr->data[4] << 8) + msg_ptr->data[3];
          //EngSpeed_ptr = &EngSpeed;
 #if J1939_AL_DEBUG
 		 printf("FMS_EEC1 EngSpeed=%d\n", EngSpeed);
@@ -148,7 +167,7 @@ void AL_process(J1939_RX_MESSAGE_T *msg_ptr)
          WatTemp = msg_ptr->data[0];
          //WatTemp_ptr = &WatTemp;
 #if J1939_AL_DEBUG
-		 printf("FMS_EEC1 WatTemp=%d\n", WatTemp);
+		 printf("FMS_ET1 WatTemp=%d\n", WatTemp);
 #endif
 		 break;
      
