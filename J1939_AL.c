@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////////////////
-// File:         J1939_AL.h
+// File:         J1939_AL.c
 // Module:       J1939 stack
 // Description:  J1939 stack Application Layer
 // Originator:   MB
@@ -33,7 +33,7 @@
 
 
 const PGN_T _pgn_table[PGN_NUM] =
-{    
+{
 #if (FMS_COMPLIANCE & FMS_BUS_STANDARD || FMS_COMPLIANCE & FMS_TRUCK_STANDARD)
    // 1.1 Parameters for Bus and Truck FMS-Standard
    FMS_LFC,        // 1.1.1 Fuel consumption, 0x00FEE9=65,257, 1000ms
@@ -202,36 +202,36 @@ void AL_process(J1939_RX_MESSAGE_T *msg_ptr)
          //FaultCode_ptr = &FaultCode;
       break;
       #endif
-     
+
       default:
-      break; 
+      break;
    }
-}  
+}
 
 
-U08 PGN_filter(PGN_T pgn) 
+U08 PGN_filter(PGN_T pgn)
 {
-   U08 left = 0; 
+   U08 left = 0;
    U08 right = PGN_NUM - 1;
    U08 middle = 0;
 
-   while (left <= right) 
-   { 
-      middle = (U08)((left + right) >> 1); 
+   while (left <= right)
+   {
+      middle = (U08)((left + right) >> 1);
 
       if (pgn == _pgn_table[middle])
-      { 
-         return TRUE; 
+      {
+         return TRUE;
       }
       
-      if (pgn > _pgn_table[middle]) 
+      if (pgn > _pgn_table[middle])
       {
          left = middle + 1;
-      } 
+      }
       else
-      { 
+      {
          right = middle - 1;
       }
-   } 
+   }
    return FALSE;
-} 
+}

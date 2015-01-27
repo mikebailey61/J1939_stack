@@ -64,3 +64,5 @@ $RECYCLE.BIN/
 *.sdf
 *.suo
 .zedstate
+J1939_AL.c~
+.J1939_AL.c.swp
